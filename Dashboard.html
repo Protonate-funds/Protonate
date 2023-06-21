@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protonate Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      padding-top: 20px;
+      position: relative;
+      min-height: 100vh;
+    }
+    .sidebar {
+      background-color: #343a40;
+      color: #fff;
+      height: calc(100vh - 40px);
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      bottom: 20px;
+      overflow-y: auto;
+    }
+    .sidebar .nav-link {
+      color: #fff;
+    }
+    .content {
+      margin-left: 260px;
+      margin-top: 20px;
+      padding-bottom: 60px;
+    }
+    .card {
+      margin-bottom: 20px;
+    }
+    .dark-mode-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #343a40;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .dark-mode-btn:hover {
+      opacity: 0.8;
+    }
+    .dark-mode {
+      background-color: #343a40;
+      color: #fff;
+    }
+    .dark-mode .card {
+      background-color: #495057;
+      color: #fff;
+    }
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: #343a40;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mx-auto">
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="md:col-span-1 sidebar">
+        
+        <ul class="nav flex-col">
+          <li class="nav-item">
+            <a class="nav-link py-2 px-4 block text-white font-semibold rounded-md hover:bg-gray-700" href="#">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link py-2 px-4 block text-white font-semibold rounded-md hover:bg-gray-700" href="#">Portfolio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link py-2 px-4 block text-white font-semibold rounded-md hover:bg-gray-700" href="#">Investments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link py-2 px-4 block text-white font-semibold rounded-md hover:bg-gray-700" href="#">Transactions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link py-2 px-4 block text-white font-semibold rounded-md hover:bg-gray-700" href="#">Reports</a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="md:col-span-3 content">
+        <h1 class="text-3xl font-semibold mb-4">Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="card bg-white rounded-lg shadow-md">
+            <div class="card-body p-4">
+              <h5 class="card-title text-xl font-semibold mb-2">Total Investments</h5>
+              <p class="card-text text-gray-700">$1,500,000</p>
+            </div>
+          </div>
+          <div class="card bg-white rounded-lg shadow-md">
+            <div class="card-body p-4">
+              <h5 class="card-title text-xl font-semibold mb-2">Total Portfolio Value</h5>
+              <p class="card-text text-gray-700">$2,000,000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button class="dark-mode-btn" id="darkModeToggle">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0L5 10m7-7v18M5 10h14" />
+    </svg>
+    
+  </button>
+  
+  <footer class="footer">
+    <div class="container mx-auto text-center">
+      <p>&copy; 2023 Protonate. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+    });
+  </script>
+</body>
+</html>
