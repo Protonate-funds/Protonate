@@ -1,86 +1,67 @@
 const express = require('express');
-const path = require('path');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 const User = require('./User');
 
 const app = express();
 
-
+app.use(
+  session({
+    secret: 'meow',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      secure: true,
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-app.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, 'signup.html'));
-});
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Dashboard.html'));
-});
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'login.html'));
-});
-app.get('/account', (req, res) => {
-  res.sendFile(path.join(__dirname, 'account.html'));
-});
 app.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
+  try {
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    if (user.password !== password) {
-      return res.status(401).send('Invalid password');
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (passwordMatch) {
+      req.session.user = user;
+      return res.redirect('/dashboard');
+    } else {
+      return res.status(401).send('Invalid credentials');
     }
-
-    res.send('Login successful');
-
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).send('Error during login');
+    console.error('Error logging in:', error);
+    res.status(500).send('Error logging in');
   }
 });
 
-app.post('/signup', async (req, res) => {
-  try {
-    const { name, email, password, confirmPassword, rememberMe } = req.body;
-
-    
-    const existingUser = await User.findOne({ $or: [{ email }, { name }] });
-    if (existingUser) {
-      return res.status(400).send('User with the same email or username already exists');
-    }
-
-    // if (password !== confirmPassword) {
-    //   return res.status(400).send('Passwords do not match');
-    // }
-
-    const newUser = new User({
-      name,
-      email,
-      password,
-      confirmPassword,
-      rememberMe
-    });
-
-    await newUser.save();
-
-    res.send('User saved to the database');
-    window.location.href="/dashboard";
-  } catch (error) {
-    console.error('Error saving user to the database:', error);
-    res.status(500).send('Error saving user to the database');
+app.get('/dashboard', (req, res) => {
+  if (req.session.user) {
+    res.sendFile(path.join(__dirname, 'dashboard.html'));
+  } else {
+    res.redirect('/login');
   }
 });
 
-
+app.get('/logout', (req, res) => {
+  req.session.destroy((error) => {
+    if (error) {
+      console.error('Error logging out:', error);
+    }
+    res.redirect('/login');
+  });
+});
 
 app.listen(3002, () => {
-  console.log('Server started on port 3000');
+  console.log('Server started on port 3002');
 });
